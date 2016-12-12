@@ -59,7 +59,7 @@ public class ThreadScheduler: SchedulerType {
 	
 	public var now: Date { return Date() }
 
-	init(){}
+	public init(){}
 	
 	public final func schedule<StateType>(_ state: StateType, action: @escaping (StateType) -> Disposable) -> Disposable {
 		var ar=ActionRunnerRelative<StateType>(action:action,state:state)

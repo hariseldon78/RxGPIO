@@ -69,11 +69,26 @@ class RxGPIOTests: XCTestCase {
 		XCTAssertEqual(counter, 10)
 
 	}
-
+	
+	func testThreadScheduler() {
+		var counter=0
+		if true {
+			let 🗑=DisposeBag()
+			Observable<Int>.interval(0.1, scheduler:ThreadScheduler())
+				.subscribe (onNext:{_ in
+					counter+=1
+				}).addDisposableTo(🗑)
+			RunLoop.current.run(until:Date(timeIntervalSinceNow: 1.05))
+		}
+		XCTAssertEqual(counter, 10)
+		
+	}
+	
     static var allTests : [(String, (RxGPIOTests) -> () throws -> Void)] {
         return [
-            ("testLedBlink", 		testLedBlink),
-            ("testMainScheduler", 	testMainScheduler)
+            ("testLedBlink", 		testLedBlink)
+            , ("testMainScheduler", 	testMainScheduler)
+			, ("testThreadScheduler", 	testThreadScheduler)
         ]
     }
 }
