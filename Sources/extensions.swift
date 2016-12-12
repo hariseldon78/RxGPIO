@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Bool {
+public extension Bool {
 	init(_ i:Int){
 		if i==0 {
 			self=false
@@ -18,7 +18,7 @@ extension Bool {
 	}
 }
 
-extension Int {
+public extension Int {
 	init(_ b:Bool){
 		if b {
 			self=1
