@@ -50,9 +50,11 @@ class RxGPIOTests: XCTestCase {
 		print("this should blink the led0 2 times")
 		for _ in 0..<2 {
 			led0.value=Int(false)
-			sleep(1)
+			led1.value=Int(true)
+			usleep(500000)
 			led0.value=Int(true)
-			sleep(1)
+			led1.value=Int(false)
+			usleep(500000)
 		}
 	}
 	
@@ -84,11 +86,18 @@ class RxGPIOTests: XCTestCase {
 		
 	}
 	
+	func testServoblaster() {
+		guard let pins=try? servoblasterPins() else {XCTFail();return}
+		XCTAssert(!pins.isEmpty)
+		print(pins)
+	}
+	
     static var allTests : [(String, (RxGPIOTests) -> () throws -> Void)] {
         return [
-            ("testLedBlink", 		testLedBlink)
+			("testLedBlink", 			testLedBlink)
             , ("testMainScheduler", 	testMainScheduler)
 			, ("testThreadScheduler", 	testThreadScheduler)
-        ]
+			, ("testServoblaster", 		testServoblaster)
+       ]
     }
 }
