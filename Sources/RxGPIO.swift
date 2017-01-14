@@ -24,10 +24,10 @@ public func servoblasterPins() throws -> [Int]
 	//		p1pins=7,11,12,13,15,16,18,22
 	if let content=String(data: data, encoding: .utf8),
 		let p1pins="p1pins=((?:\\d+,?)*)".r?
-		.findFirst(in:content)?
-		.group(at:1)?
-		.split(using:",".r)
-		.map ({Int($0)!})
+			.findFirst(in:content)?
+			.group(at:1)?
+			.split(using:",".r)
+			.map ({Int($0)!})
 	{
 		return p1pins
 	} else {

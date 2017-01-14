@@ -86,6 +86,16 @@ class RxGPIOTests: XCTestCase {
 		
 	}
 	
+	func testButton() {
+		if true {
+			let 🗑=DisposeBag()
+			button(pin:btn0).subscribe(onNext:{
+				pressed in
+				led0.value=Int(pressed)
+			}).addDisposableTo(🗑)
+			RunLoop.current.run(until:Date(timeIntervalSinceNow: 10.0))
+		}
+	}
 	func testServoblaster() {
 		guard let pins=try? servoblasterPins() else {XCTFail();return}
 		XCTAssert(!pins.isEmpty)
@@ -98,6 +108,7 @@ class RxGPIOTests: XCTestCase {
             , ("testMainScheduler", 	testMainScheduler)
 			, ("testThreadScheduler", 	testThreadScheduler)
 			, ("testServoblaster", 		testServoblaster)
+			, ("testButton", 			testButton)
        ]
     }
 }
