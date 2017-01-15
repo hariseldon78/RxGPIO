@@ -10,6 +10,10 @@ let led0:GPIO=gpios[.P2]!
 let led1:GPIO=gpios[.P3]!
 let btn0:GPIO=gpios[.P4]!
 
+let ultrasonicTrigger:GPIO=gpios[.P27]!
+let ultrasonicEcho:GPIO=gpios[.P22]!
+//let ultrasonicOut:GPIO=gpios[.P17]!
+
 class RxGPIOTests: XCTestCase {
 	func invert(pin:GPIO){
 		let b=Bool(pin.value)
@@ -17,13 +21,16 @@ class RxGPIOTests: XCTestCase {
 	}
 	
 	let setup:Bool={
-		[led0,led1].forEach {
+		[led0,led1, ultrasonicTrigger].forEach {
 			$0.direction = .OUT
 		}
-		[btn0].forEach {
+		[led0,led1, ultrasonicTrigger].forEach {
+			assert($0.direction == .OUT)
+		}
+
+		[btn0, ultrasonicEcho].forEach {
 			$0.direction = .IN
 		}
-		print("gpios ok")
 		return true
 	}()
 	
@@ -49,11 +56,11 @@ class RxGPIOTests: XCTestCase {
 	func testLedBlink() {
 		print("this should blink the led0 2 times")
 		for _ in 0..<2 {
-			led0.value=Int(false)
-			led1.value=Int(true)
+			led0.boolValue=false
+			led1.boolValue=true
 			usleep(500000)
-			led0.value=Int(true)
-			led1.value=Int(false)
+			led0.boolValue=true
+			led1.boolValue=false
 			usleep(500000)
 		}
 	}
@@ -87,14 +94,22 @@ class RxGPIOTests: XCTestCase {
 	}
 	
 	func testButton() {
-		if true {
-			let 🗑=DisposeBag()
-			button(pin:btn0).subscribe(onNext:{
-				pressed in
-				led0.value=Int(pressed)
-			}).addDisposableTo(🗑)
-			RunLoop.current.run(until:Date(timeIntervalSinceNow: 10.0))
-		}
+		print("press and release the button, it should control the led0")
+		let 🗑=DisposeBag()
+		button(pin:btn0).subscribe(onNext:{
+			pressed in
+			led0.boolValue=pressed
+		}).addDisposableTo(🗑)
+		RunLoop.current.run(until:Date(timeIntervalSinceNow: 5.0))
+	}
+	func testUltrasonic() {
+		print("position something at various distances in front of the ultrasonic sensor")
+		let 🗑=DisposeBag()
+		ultrasonic(trigger:ultrasonicTrigger,echo:ultrasonicEcho).subscribe(onNext:{
+			distance in
+			print("distance: \(distance)")
+		}).addDisposableTo(🗑)
+		RunLoop.current.run(until:Date(timeIntervalSinceNow: 10.0))
 	}
 	func testServoblaster() {
 		guard let pins=try? servoblasterPins() else {XCTFail();return}
@@ -109,6 +124,8 @@ class RxGPIOTests: XCTestCase {
 			, ("testThreadScheduler", 	testThreadScheduler)
 			, ("testServoblaster", 		testServoblaster)
 			, ("testButton", 			testButton)
+			, ("testUltrasonic", 		testUltrasonic)
+			
        ]
     }
 }

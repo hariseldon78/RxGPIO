@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftyGPIO
 
 public extension Bool {
 	init(_ i:Int){
@@ -24,6 +25,18 @@ public extension Int {
 			self=1
 		} else {
 			self=0
+		}
+	}
+}
+
+public extension GPIO {
+
+	public var boolValue: Bool {
+		set(val) {
+			value=Int(val)
+		}
+		get {
+			return Bool(value)
 		}
 	}
 }
