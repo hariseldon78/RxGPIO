@@ -23,31 +23,33 @@ public func ultrasonic(trigger:GPIO,echo:GPIO,interval:TimeInterval=1.0, schedul
 			// source=http://www.raspberrypi-spy.co.uk/archive/python/ultrasonic_1.py
 			trigger.boolValue=false
 			// Allow module to settle
-			usleep(500000)
+			usleep(50000)
 			// Send 10us pulse to trigger
 			trigger.boolValue=true
 			usleep(10)
 			trigger.boolValue=false
 			
 			var start=Date()
-
+			
 			while echo.boolValue==false {
 				start=Date()
 			}
-
+			
 			var stop=Date()
 			while echo.boolValue==true {
 				stop=Date()
 			}
-
+			
 			// Calculate pulse length
-			var elapsed=stop.timeIntervalSince(start)
-			print("elapsed:\(elapsed)")
+			let elapsed=stop.timeIntervalSince(start)
+			//			print("elapsed:\(elapsed)")
 			// Distance pulse travelled in that time is time
 			// multiplied by the speed of sound (cm/s)
 			// That was the distance there and back so halve the value
 			return elapsed * 34300.0 / 2.0
-	}
+		}
+		.filter { $0<200 && $0>5}
+	
 }
 
 enum RxGPIOErrors: Error {

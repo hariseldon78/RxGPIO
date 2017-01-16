@@ -102,6 +102,11 @@ class RxGPIOTests: XCTestCase {
 		}).addDisposableTo(🗑)
 		RunLoop.current.run(until:Date(timeIntervalSinceNow: 5.0))
 	}
+	func testServoblaster() {
+		guard let pins=try? servoblasterPins() else {XCTFail();return}
+		XCTAssert(!pins.isEmpty)
+		print(pins)
+	}
 	func testUltrasonic() {
 		print("position something at various distances in front of the ultrasonic sensor")
 		let 🗑=DisposeBag()
@@ -110,11 +115,6 @@ class RxGPIOTests: XCTestCase {
 			print("distance: \(distance)")
 		}).addDisposableTo(🗑)
 		RunLoop.current.run(until:Date(timeIntervalSinceNow: 10.0))
-	}
-	func testServoblaster() {
-		guard let pins=try? servoblasterPins() else {XCTFail();return}
-		XCTAssert(!pins.isEmpty)
-		print(pins)
 	}
 	
     static var allTests : [(String, (RxGPIOTests) -> () throws -> Void)] {
